@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج بطولة ألعاب القوى البرالمبية 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #fff;
+            color: #1e293b;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        /* Header */
+        .championship-header {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 3px solid #059669;
+            margin-bottom: 20px;
+        }
+        .championship-header .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 10px;
+        }
+        .championship-header .badge {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 22px;
+            border: 3px solid #F59E0B;
+        }
+        .championship-header h1 {
+            font-size: 20pt;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: 0.5px;
+        }
+        .championship-header .subtitle {
+            font-size: 11pt;
+            color: #059669;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .championship-header .meta {
+            font-size: 9pt;
+            color: #64748b;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+        .championship-header .date-line {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 9pt;
+            color: #475569;
+        }
+
+        /* Section grouping */
+        .section-title {
+            background: linear-gradient(90deg, #ecfdf5 0%, #d1fae5 100%);
+            border-right: 5px solid #059669;
+            padding: 10px 16px;
+            margin: 24px 0 12px;
+            font-size: 12pt;
+            font-weight: 900;
+            color: #064e3b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            page-break-after: avoid;
+        }
+        .section-title .stage-label {
+            background: #059669;
+            color: white;
+            font-size: 9pt;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .section-title .gender-label {
+            background: #0f172a;
+            color: white;
+            font-size: 9pt;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+        .event-subtitle {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 14px;
+            margin: 10px 0 8px;
+            font-size: 11pt;
+            font-weight: 700;
+            color: #334155;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            page-break-after: avoid;
+        }
+        .event-subtitle .event-icon {
+            width: 28px; height: 28px;
+            background: #059669;
+            color: white;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+        }
+        .event-subtitle .medical-tag {
+            margin-right: auto;
+            background: #f3e8ff;
+            color: #7e22ce;
+            font-size: 9pt;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: 1px solid #e9d5ff;
+        }
+
+        /* Table */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+            page-break-inside: auto;
+        }
+        .results-table thead {
+            display: table-header-group;
+        }
+        .results-table th {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 8px 10px;
+            text-align: center;
+            border-bottom: 2px solid #cbd5e1;
+            white-space: nowrap;
+        }
+        .results-table th:first-child { text-align: right; }
+        .results-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 10pt;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .results-table td:first-child {
+            text-align: right;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .results-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .results-table tr {
+            page-break-inside: avoid;
+        }
+
+        /* Rank badges */
+        .rank-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: 700;
+            min-width: 50px;
+        }
+        .rank-1 { background: linear-gradient(135deg, #F59E0B, #D97706); color: white; }
+        .rank-2 { background: linear-gradient(135deg, #94A3B8, #64748B); color: white; }
+        .rank-3 { background: linear-gradient(135deg, #B45309, #92400E); color: white; }
+        .rank-other { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+        .club-cell {
+            font-size: 9pt;
+            color: #64748b;
+            max-width: 180px;
+        }
+        .score-cell {
+            font-weight: 900;
+            color: #059669;
+            font-size: 10pt;
+            direction: ltr;
+        }
+        .points-cell {
+            font-weight: 900;
+            color: #b45309;
+        }
+
+        /* Print controls (screen only) */
+        .print-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            padding: 16px;
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .print-controls button {
+            font-family: 'Cairo', sans-serif;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 10pt;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-print {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+        .btn-print:hover { box-shadow: 0 4px 12px rgba(5,150,105,0.35); transform: translateY(-1px); }
+        .btn-back {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .btn-back:hover { background: #cbd5e1; }
+        .loading-box {
+            text-align: center;
+            padding: 60px;
+        }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid #e2e8f0;
+            border-bottom-color: #059669;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Navbar */
+        .main-navbar {
+            background: linear-gradient(90deg, #0f172a 0%, #064e3b 100%);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #F59E0B;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .main-navbar .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .main-navbar .nav-logo .logo-icon {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            display: flex; align-items: center; justify-content: center;
+            color: #0f172a;
+            font-size: 14px;
+        }
+        .main-navbar .nav-logo span {
+            font-size: 11pt;
+            font-weight: 900;
+        }
+        .main-navbar .nav-links {
+            display: flex; gap: 6px;
+            flex-wrap: wrap;
+        }
+        .main-navbar .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .main-navbar .nav-links a:hover { background: rgba(255,255,255,0.1); }
+        .main-navbar .nav-links a.active {
+            background: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        /* Footer */
+        .dev-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            border-top: 1px solid #1e293b;
+            padding: 12px;
+            text-align: center;
+            font-size: 9pt;
+            font-weight: 600;
+        }
+        .dev-footer a { color: #F59E0B; text-decoration: none; }
+        .dev-footer .sep { color: #475569; margin: 0 8px; }
+
+        /* Print styles */
+        @media print {
+            .print-controls { display: none !important; }
+            .page { padding: 16px 24px; }
+            .section-title { page-break-after: avoid; }
+            .event-subtitle { page-break-after: avoid; }
+            .results-table tr { page-break-inside: avoid; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="main-navbar">
+        <div class="nav-logo">
+            <div class="logo-icon"><i class="fa-solid fa-person-running"></i></div>
+            <span>بطولة العاب القوى البرالمبية</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="printresults.html" class="active">نتائج الطباعة</a>
+            <a href="points.html">النقاط</a>
+            <a href="developer.html">المطور</a>
+        </div>
+    </nav>
+
+    <div class="print-controls">
+        <button class="btn-back" onclick="history.back()">
+            <i class="fa-solid fa-arrow-right"></i> رجوع للقائمة الرئيسية
+        </button>
+        <button class="btn-print" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> طباعة / حفظ PDF
+        </button>
+    </div>
+
+    <div class="page" id="report-page">
+        <div class="loading-box" id="loading-box">
+            <div class="spinner"></div>
+            <p style="color:#64748b; font-weight:700;">جاري ترتيب وتحضير النتائج الرسمية...</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        let fullDataset = [];
+
+        const rankOrder = { 'الاول': 1, 'الأول': 1, 'الثاني': 2, 'الثانى': 2, 'الثالث': 3, 'الرابع': 4, 'الخامس': 5 };
+
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                fullDataset = await response.json();
+                fullDataset.forEach(item => {
+                    item.points = parseFloat(item.points) || 0;
+                });
+                buildReport();
+            } catch (e) {
+                document.getElementById('loading-box').innerHTML = '<p style="color:#dc2626; font-weight:700;">تعذر تحميل بيانات النتائج</p>';
+            }
+        }
+
+        function buildReport() {
+            const page = document.getElementById('report-page');
+            document.getElementById('loading-box').remove();
+
+            // Sort: gender (male first), stage, competition, medical, rank
+            fullDataset.sort((a, b) => {
+                // Gender: male (ذكر) first
+                const ga = a.gender === 'ذكر' ? 0 : 1;
+                const gb = b.gender === 'ذكر' ? 0 : 1;
+                if (ga !== gb) return ga - gb;
+
+                // Stage: كبار first
+                const sa = a.stage === 'كبار' ? 0 : 1;
+                const sb = b.stage === 'كبار' ? 0 : 1;
+                if (sa !== sb) return sa - sb;
+
+                // Competition name
+                const ca = String(a.comp || '');
+                const cb = String(b.comp || '');
+                if (ca !== cb) return ca.localeCompare(cb, 'ar');
+
+                // Medical class
+                const ma = String(a.medical || '');
+                const mb = String(b.medical || '');
+                if (ma !== mb) return ma.localeCompare(mb, 'ar');
+
+                // Rank (lower is better)
+                const ra = rankOrder[a.rank] || 99;
+                const rb = rankOrder[b.rank] || 99;
+                return ra - rb;
+            });
+
+            // Group by gender -> stage -> competition -> medical
+            let currentGender = '';
+            let currentStage = '';
+            let currentComp = '';
+            let currentMedical = '';
+            let tableBody = null;
+            let tableContainer = null;
+            let rowsCount = 0;
+
+            page.innerHTML = '';
+            page.appendChild(createHeader());
+
+            fullDataset.forEach((item, index) => {
+                const genderChanged = item.gender !== currentGender;
+                const stageChanged = item.stage !== currentStage;
+                const compChanged = item.comp !== currentComp;
+                const medicalChanged = item.medical !== currentMedical;
+
+                if (genderChanged) {
+                    currentGender = item.gender;
+                    currentStage = '';
+                    currentComp = '';
+                    currentMedical = '';
+                    const genderTitle = document.createElement('div');
+                    genderTitle.className = 'section-title';
+                    genderTitle.innerHTML = `
+                        <span class="gender-label">${item.gender}</span>
+                        <span>فئة ${item.gender === 'ذكر' ? 'الذكور' : 'الإناث'}</span>
+                    `;
+                    page.appendChild(genderTitle);
+                }
+
+                if (stageChanged) {
+                    currentStage = item.stage;
+                    currentComp = '';
+                    currentMedical = '';
+                    const stageTitle = document.createElement('div');
+                    stageTitle.className = 'section-title';
+                    stageTitle.style.background = 'linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%)';
+                    stageTitle.style.borderRightColor = '#2563eb';
+                    stageTitle.style.color = '#1e3a8a';
+                    stageTitle.innerHTML = `
+                        <span class="stage-label" style="background:#2563eb;">${item.stage}</span>
+                        <span>المرحلة ${item.stage === 'كبار' ? 'الكبار (Senior)' : 'الناشئين (Junior)'}</span>
+                    `;
+                    page.appendChild(stageTitle);
+                }
+
+                if (compChanged || medicalChanged) {
+                    currentComp = item.comp;
+                    currentMedical = item.medical;
+
+                    // Close previous table if exists
+                    if (tableContainer) {
+                        page.appendChild(tableContainer);
+                    }
+
+                    // Create new event subtitle
+                    const eventSub = document.createElement('div');
+                    eventSub.className = 'event-subtitle';
+                    eventSub.innerHTML = `
+                        <div class="event-icon"><i class="fa-solid fa-person-running"></i></div>
+                        <span>مسابقة ${item.comp}</span>
+                        <span class="medical-tag">الفئة الطبية: ${item.medical}</span>
+                    `;
+                    page.appendChild(eventSub);
+
+                    // Create new table
+                    tableContainer = document.createElement('div');
+                    tableContainer.style.marginBottom = '8px';
+                    const table = document.createElement('table');
+                    table.className = 'results-table';
+                    table.innerHTML = `
+                        <thead>
+                            <tr>
+                                <th style="width:40%">اسم اللاعب / اللاعبة</th>
+                                <th style="width:22%">الهيئة الرياضية</th>
+                                <th style="width:14%">الرقم المحقق</th>
+                                <th style="width:12%">الترتيب</th>
+                                <th style="width:12%">النقاط</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    `;
+                    tableContainer.appendChild(table);
+                    tableBody = table.querySelector('tbody');
+                    rowsCount = 0;
+                }
+
+                // Add row
+                const tr = document.createElement('tr');
+                const rankClass = item.rank === 'الاول' || item.rank === 'الأول' ? 'rank-1' :
+                                  item.rank === 'الثاني' || item.rank === 'الثانى' ? 'rank-2' :
+                                  item.rank === 'الثالث' ? 'rank-3' : 'rank-other';
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td class="club-cell">${item.club}</td>
+                    <td class="score-cell">${item.score}</td>
+                    <td><span class="rank-badge ${rankClass}">${item.rank}</span></td>
+                    <td class="points-cell">${item.points}</td>
+                `;
+                tableBody.appendChild(tr);
+                rowsCount++;
+            });
+
+            // Append last table
+            if (tableContainer) {
+                page.appendChild(tableContainer);
+            }
+
+            // Add summary footer
+            const summary = document.createElement('div');
+            summary.style.cssText = 'margin-top:30px; padding:16px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; text-align:center; font-size:10pt; color:#64748b;';
+            const maleCount = fullDataset.filter(i => i.gender === 'ذكر').length;
+            const femaleCount = fullDataset.filter(i => i.gender === 'انثى').length;
+            summary.innerHTML = `
+                <span style="font-weight:900; color:#059669;">إجمالي السجلات:</span> ${fullDataset.length} &nbsp;|&nbsp;
+                <span style="font-weight:900; color:#2563eb;">الذكور:</span> ${maleCount} &nbsp;|&nbsp;
+                <span style="font-weight:900; color:#db2777;">الإناث:</span> ${femaleCount}
+                <br><span style="font-size:9pt; margin-top:6px; display:inline-block;">البطولة الرسمية لألعاب القوى البارالمبية المصرية 2026</span>
+            `;
+            page.appendChild(summary);
+        }
+
+        function createHeader() {
+            const div = document.createElement('div');
+            div.className = 'championship-header';
+            div.innerHTML = `
+                <div class="logo-row">
+                    <div class="badge"><i class="fa-solid fa-person-running"></i></div>
+                    <div>
+                        <h1>نتائج بطولة ألعاب القوى البرالمبية</h1>
+                        <div class="subtitle">اللجنة البرالمبية المصرية — لجنة ألعاب القوى</div>
+                    </div>
+                </div>
+                <div class="meta">الموسم الرياضي 2026 | مسابقات المضمار والميدان</div>
+                <div class="date-line">تاريخ التقرير: ${new Date().toLocaleDateString('ar-EG')}</div>
+            `;
+            return div;
+        }
+
+        window.onload = loadData;
+    </script>
+
+    <!-- تذييل المطور -->
+    <footer class="dev-footer">
+        تطوير: <a href="developer.html">المهندس أحمد محمد سليمان</a>
+        <span class="sep">|</span>
+        <i class="fa-brands fa-whatsapp" style="color:#34d399"></i> +20 1100 502 095
+        <span class="sep">|</span>
+        <i class="fa-solid fa-envelope" style="color:#60a5fa"></i> soliman.java@gmail.com
+    </footer>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطولة العاب القوى البرالمبية - اللجنة البرالمبية المصرية لجنة العاب القوى</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome للأيقونات الحركية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .medal-gold {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+        }
+        .medal-silver {
+            background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(100, 116, 139, 0.35);
+        }
+        .medal-bronze {
+            background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(180, 83, 9, 0.35);
+        }
+        .medal-other {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+        .loader {
+            width: 48px; height: 48px;
+            border: 4px solid #e2e8f0;
+            border-bottom-color: #059669;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .pagination-btn {
+            transition: all 0.15s ease;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .sort-header { cursor: pointer; user-select: none; }
+        .sort-header:hover { background-color: #e2e8f0; }
+        .sort-asc::after { content: ' ▲'; font-size: 10px; color: #059669; }
+        .sort-desc::after { content: ' ▼'; font-size: 10px; color: #059669; }
+        .championship-ring {
+            position: relative;
+        }
+        .championship-ring::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 2px solid #F59E0B;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased last:mb-0">
+
+    <!-- شريط التنقل الرئيسي -->
+    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-[60] border-b border-amber-500/30">
+        <div class="container mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-900 font-bold text-sm">
+                    <i class="fa-solid fa-person-running"></i>
+                </div>
+                <span class="font-bold text-sm hidden sm:inline">بطولة العاب القوى البرالمبية</span>
+            </div>
+            <div class="flex items-center gap-1">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition">الرئيسية</a>
+                <a href="printresults.html" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-white/10 transition">نتائج الطباعة</a>
+                <a href="points.html" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-white/10 transition">النقاط</a>
+                <a href="developer.html" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-white/10 transition">المطور</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الهيدر الرسمي للبطولة -->
+    <header class="bg-gradient-to-r from-slate-900 via-emerald-900 to-slate-900 text-white shadow-2xl sticky top-0 z-50 border-b-2 border-amber-500/40">
+        <div class="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 text-center sm:text-right">
+                <div class="championship-ring bg-white p-2.5 rounded-full shadow-lg w-14 h-14 flex items-center justify-center">
+                    <i class="fa-solid fa-person-running text-emerald-700 text-2xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 justify-center sm:justify-start">
+                        <span class="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">2026</span>
+                        <h1 class="text-lg sm:text-xl font-black tracking-wide">بطولة ألعاب القوى البرالمبية</h1>
+                    </div>
+                    <p class="text-xs text-emerald-300 font-semibold mt-0.5">اللجنة البرالمبية المصرية — لجنة ألعاب القوى</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="bg-emerald-600/30 text-emerald-100 text-xs px-3 py-1.5 rounded-full border border-emerald-500/30 backdrop-blur-sm font-bold">
+                    <i class="fa-solid fa-database ml-1 text-amber-400"></i> <span id="header-count">جاري التحميل...</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 max-w-7xl">
+        
+        <!-- بطاقات الإحصائيات -->
+        <div class="bg-gradient-to-br from-white to-slate-50 p-5 rounded-3xl shadow-lg border border-slate-200/80 mb-6">
+            <div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
+                <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                <h2 class="text-sm font-black text-slate-800">لوحة الإحصائيات الفنية</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-4 rounded-2xl border border-emerald-200 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center text-lg shadow-md"><i class="fa-solid fa-users"></i></div>
+                    <div><h4 class="text-[10px] text-emerald-700 font-bold">إجمالي السجلات</h4><p class="text-lg font-black text-emerald-900" id="stat-total">—</p></div>
+                </div>
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100/50 p-4 rounded-2xl border border-blue-200 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center text-lg shadow-md"><i class="fa-solid fa-mars"></i></div>
+                    <div><h4 class="text-[10px] text-blue-700 font-bold">الذكور</h4><p class="text-lg font-black text-blue-900" id="stat-male">—</p></div>
+                </div>
+                <div class="bg-gradient-to-br from-rose-50 to-rose-100/50 p-4 rounded-2xl border border-rose-200 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 text-white flex items-center justify-center text-lg shadow-md"><i class="fa-solid fa-venus"></i></div>
+                    <div><h4 class="text-[10px] text-rose-700 font-bold">الإناث</h4><p class="text-lg font-black text-rose-900" id="stat-female">—</p></div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100/50 p-4 rounded-2xl border border-purple-200 flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 text-white flex items-center justify-center text-lg shadow-md"><i class="fa-solid fa-flag"></i></div>
+                    <div><h4 class="text-[10px] text-purple-700 font-bold">الهيئات المشاركة</h4><p class="text-lg font-black text-purple-900" id="stat-clubs">—</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- أدوات الفلترة والبحث -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-3xl shadow-xl mb-6 border border-slate-700/50">
+            <div class="flex items-center gap-2 mb-5 text-amber-400 font-black text-sm border-b border-slate-700 pb-3">
+                <i class="fa-solid fa-sliders"></i> مرشحات البحث المتقدمة
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-venus-mars ml-1 text-amber-400"></i> الجنس</label>
+                    <select id="filter-gender" onchange="filterData()" class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 cursor-pointer transition-all">
+                        <option value="">الكل</option>
+                        <option value="ذكر">ذكور</option>
+                        <option value="انثى">إناث</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-layer-group ml-1 text-amber-400"></i> المرحلة السنية</label>
+                    <select id="filter-stage" onchange="filterData()" class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 cursor-pointer transition-all">
+                        <option value="">كل المراحل</option>
+                        <option value="كبار">كبار (Senior)</option>
+                        <option value="ناشئين">ناشئين (Junior)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-stopwatch ml-1 text-amber-400"></i> المسابقة</label>
+                    <select id="filter-competition" onchange="filterData()" class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 cursor-pointer transition-all">
+                        <option value="">جاري التحميل...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-shield-halved ml-1 text-amber-400"></i> الهيئة / النادي</label>
+                    <select id="filter-club" onchange="filterData()" class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 cursor-pointer transition-all">
+                        <option value="">جاري التحميل...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-wheelchair ml-1 text-amber-400"></i> الفئة الطبية</label>
+                    <select id="filter-medical" onchange="filterData()" class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 cursor-pointer transition-all">
+                        <option value="">جاري التحميل...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5"><i class="fa-solid fa-magnifying-glass ml-1 text-amber-400"></i> البحث بالاسم</label>
+                    <input type="text" id="search-name" oninput="filterData()" placeholder="اسم اللاعب..." class="w-full bg-slate-800/80 border border-slate-600 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 transition-all">
+                </div>
+            </div>
+        </div>
+
+        <!-- منصة عرض البيانات -->
+        <div class="bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
+            <div class="p-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 flex justify-between items-center">
+                <span class="text-xs font-black text-slate-700" id="results-count">جاري تحميل البيانات...</span>
+                <span class="text-[11px] bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full shadow-sm"><i class="fa-solid fa-bolt animate-pulse"></i> بيانات حية</span>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading-state" class="flex flex-col items-center justify-center py-20">
+                <div class="loader mb-4"></div>
+                <p class="text-slate-500 font-bold text-sm">جاري استيراد بيانات البطولة...</p>
+            </div>
+
+            <!-- تخطيط الموبايل -->
+            <div id="mobile-cards-container" class="hidden md:hidden divide-y divide-slate-100"></div>
+
+            <!-- تخطيط الشاشات الكبيرة -->
+            <div id="desktop-table-wrapper" class="hidden md:block overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead class="sticky top-0 z-10">
+                        <tr class="bg-slate-100 text-slate-600 text-xs font-black uppercase border-b border-slate-200">
+                            <th class="py-3.5 px-4 sort-header" onclick="sortBy('name')">اللاعب/ة</th>
+                            <th class="py-3.5 px-4 sort-header" onclick="sortBy('gender')">النوع</th>
+                            <th class="py-3.5 px-4 sort-header" onclick="sortBy('stage')">المرحلة</th>
+                            <th class="py-3.5 px-4 sort-header" onclick="sortBy('club')">الهيئة</th>
+                            <th class="py-3.5 px-4 text-center sort-header" onclick="sortBy('medical')">الفئة الطبية</th>
+                            <th class="py-3.5 px-4 text-center sort-header" onclick="sortBy('comp')">المسابقة</th>
+                            <th class="py-3.5 px-4 text-center sort-header" onclick="sortBy('score')">الرقم</th>
+                            <th class="py-3.5 px-4 text-center sort-header" onclick="sortBy('rank')">الترتيب</th>
+                            <th class="py-3.5 px-4 text-center sort-header" onclick="sortBy('points')">النقاط</th>
+                        </tr>
+                    </thead>
+                    <tbody id="desktop-table-body" class="divide-y divide-slate-100 text-sm text-slate-700"></tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination-bar" class="hidden p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-bold">الصفحة</span>
+                    <button id="btn-prev" onclick="changePage(-1)" class="pagination-btn w-8 h-8 rounded-lg bg-white border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    <span id="page-info" class="text-sm font-black text-slate-800 min-w-[60px] text-center">1 / 1</span>
+                    <button id="btn-next" onclick="changePage(1)" class="pagination-btn w-8 h-8 rounded-lg bg-white border border-slate-300 text-slate-600 flex items-center justify-center hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-bold">عرض</span>
+                    <select id="page-size" onchange="setPageSize()" class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 focus:outline-none focus:border-emerald-400 cursor-pointer">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                    <span class="text-xs text-slate-500 font-bold">سجل في الصفحة</span>
+                </div>
+            </div>
+
+            <!-- إشعار عدم تطابق الفلاتر -->
+            <div id="no-results" class="hidden text-center py-20">
+                <i class="fa-solid fa-folder-open text-slate-300 text-5xl mb-3"></i>
+                <p class="text-slate-500 font-bold text-sm">لا توجد سجلات تطابق خيارات الفرز والبحث المحددة حالياً.</p>
+                <button onclick="clearFilters()" class="mt-4 text-xs font-bold text-emerald-600 hover:text-emerald-700 underline">مسح جميع الفلاتر</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 text-center py-6 mt-12 border-t border-slate-800 text-xs">
+        <p class="font-bold text-slate-300">البطولة الرسمية لألعاب القوى البارالمبية المصرية 2026</p>
+        <p class="text-slate-500 mt-1">تطوير اللجنة الفنية ونظم المعلومات لمسابقات المضمار والميدان</p>
+    </footer>
+
+    <script>
+        let fullDataset = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let pageSize = 20;
+        let sortKey = '';
+        let sortDir = 1;
+
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                fullDataset = await response.json();
+                fullDataset.forEach(item => {
+                    item.points = parseFloat(item.points) || 0;
+                });
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('mobile-cards-container').classList.remove('hidden');
+                document.getElementById('desktop-table-wrapper').classList.remove('hidden');
+                document.getElementById('pagination-bar').classList.remove('hidden');
+                initDynamicDropdowns();
+                filterData();
+                updateStats();
+                document.getElementById('header-count').innerText = fullDataset.length + ' سجل فني';
+            } catch (e) {
+                document.getElementById('loading-state').innerHTML = '<p class="text-red-500 font-bold">تعذر تحميل البيانات</p>';
+            }
+        }
+
+        function initDynamicDropdowns() {
+            const competitions = new Set();
+            const clubs = new Set();
+            const medicals = new Set();
+            fullDataset.forEach(item => {
+                if(item.comp) competitions.add(item.comp.trim());
+                if(item.club) clubs.add(item.club.trim());
+                if(item.medical) medicals.add(item.medical.trim());
+            });
+            buildSelectOptions('filter-competition', competitions, 'كل المسابقات');
+            buildSelectOptions('filter-club', clubs, 'كل الهيئات');
+            buildSelectOptions('filter-medical', medicals, 'كل الفئات الطبية');
+        }
+
+        function buildSelectOptions(elementId, datasetSet, defaultText) {
+            const selectEl = document.getElementById(elementId);
+            let html = `<option value="">${defaultText}</option>`;
+            Array.from(datasetSet).sort().forEach(val => {
+                if(val) html += `<option value="${val}">${val}</option>`;
+            });
+            selectEl.innerHTML = html;
+        }
+
+        function getMedalClass(rank) {
+            if(rank === 'الاول' || rank === 'الأول') return 'medal-gold';
+            if(rank === 'الثاني' || rank === 'الثانى') return 'medal-silver';
+            if(rank === 'الثالث') return 'medal-bronze';
+            return 'medal-other';
+        }
+
+        function getMedalIcon(rank) {
+            if(rank === 'الاول' || rank === 'الأول') return '<i class="fa-solid fa-medal ml-1"></i>';
+            if(rank === 'الثاني' || rank === 'الثانى') return '<i class="fa-solid fa-medal ml-1"></i>';
+            if(rank === 'الثالث') return '<i class="fa-solid fa-medal ml-1"></i>';
+            return '';
+        }
+
+        function sortBy(key) {
+            if(sortKey === key) sortDir *= -1;
+            else { sortKey = key; sortDir = 1; }
+            document.querySelectorAll('.sort-header').forEach(th => th.classList.remove('sort-asc','sort-desc'));
+            const activeTh = document.querySelector(`.sort-header[onclick="sortBy('${key}')"]`);
+            if(activeTh) activeTh.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+            filterData();
+        }
+
+        function filterData() {
+            const genderValue = document.getElementById('filter-gender').value;
+            const stageValue = document.getElementById('filter-stage').value;
+            const compValue = document.getElementById('filter-competition').value;
+            const clubValue = document.getElementById('filter-club').value;
+            const medicalValue = document.getElementById('filter-medical').value;
+            const searchValue = document.getElementById('search-name').value.toLowerCase().trim();
+
+            filteredData = fullDataset.filter(item => {
+                const matchGender = genderValue === "" || item.gender === genderValue;
+                const matchStage = stageValue === "" || item.stage === stageValue;
+                const matchComp = compValue === "" || item.comp === compValue;
+                const matchClub = clubValue === "" || item.club === clubValue;
+                const matchMedical = medicalValue === "" || item.medical === medicalValue;
+                const matchSearch = item.name.toLowerCase().includes(searchValue);
+                return matchGender && matchStage && matchComp && matchClub && matchMedical && matchSearch;
+            });
+
+            if(sortKey) {
+                filteredData.sort((a,b) => {
+                    let va = a[sortKey] || '';
+                    let vb = b[sortKey] || '';
+                    if(!isNaN(parseFloat(va)) && !isNaN(parseFloat(vb))) {
+                        return (parseFloat(va) - parseFloat(vb)) * sortDir;
+                    }
+                    return String(va).localeCompare(String(vb), 'ar') * sortDir;
+                });
+            }
+
+            currentPage = 1;
+            renderPage();
+            document.getElementById('stat-total').innerText = filteredData.length;
+        }
+
+        function renderPage() {
+            const total = filteredData.length;
+            const totalPages = Math.max(1, Math.ceil(total / pageSize));
+            if(currentPage > totalPages) currentPage = totalPages;
+            if(currentPage < 1) currentPage = 1;
+
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageItems = filteredData.slice(start, end);
+
+            document.getElementById('results-count').innerText = `عرض ${pageItems.length} من ${total} سجل`;
+            document.getElementById('page-info').innerText = `${currentPage} / ${totalPages}`;
+            document.getElementById('btn-prev').disabled = currentPage === 1;
+            document.getElementById('btn-next').disabled = currentPage === totalPages;
+
+            const mobileContainer = document.getElementById('mobile-cards-container');
+            const desktopContainer = document.getElementById('desktop-table-body');
+            const noResults = document.getElementById('no-results');
+
+            if(total === 0) {
+                noResults.classList.remove('hidden');
+                mobileContainer.classList.add('hidden');
+                document.getElementById('desktop-table-wrapper').classList.add('hidden');
+                document.getElementById('pagination-bar').classList.add('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+            mobileContainer.classList.remove('hidden');
+            document.getElementById('desktop-table-wrapper').classList.remove('hidden');
+            document.getElementById('pagination-bar').classList.remove('hidden');
+
+            let mobileHTML = '';
+            let desktopHTML = '';
+
+            pageItems.forEach(item => {
+                const isMale = item.gender === "ذكر";
+                const genderClass = isMale ? "bg-blue-50 text-blue-700 border border-blue-100" : "bg-rose-50 text-rose-700 border border-rose-100";
+                const genderIcon = isMale ? "fa-mars" : "fa-venus";
+                const medalClass = getMedalClass(item.rank);
+                const medalIcon = getMedalIcon(item.rank);
+
+                mobileHTML += `
+                    <div class="p-4 bg-white hover:bg-slate-50/60 transition-all duration-200 animate-fade-in">
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <div>
+                                <h3 class="text-sm font-black text-slate-900">${item.name}</h3>
+                                <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-building text-slate-400 ml-1"></i>${item.club}</p>
+                            </div>
+                            <span class="text-[11px] ${medalClass} px-2.5 py-0.5 rounded-full whitespace-nowrap font-bold">${medalIcon}${item.rank}</span>
+                        </div>
+                        <div class="flex gap-2 my-2 flex-wrap">
+                            <span class="text-[10px] font-bold ${genderClass} px-2 py-0.5 rounded-md"><i class="fa-solid ${genderIcon} ml-1"></i>${item.gender}</span>
+                            <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">${item.stage}</span>
+                            <span class="text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 px-2 py-0.5 rounded-md">${item.medical}</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-3 pt-2 border-t border-dashed border-slate-100 text-center">
+                            <div class="bg-slate-50 rounded-xl p-1.5">
+                                <span class="block text-[9px] text-slate-400 font-bold">المسابقة</span>
+                                <span class="text-xs font-bold text-slate-800">${item.comp}</span>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-1.5">
+                                <span class="block text-[9px] text-slate-400 font-bold">الرقم</span>
+                                <span class="text-xs font-black text-emerald-700">${item.score}</span>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-1.5">
+                                <span class="block text-[9px] text-slate-400 font-bold">النقاط</span>
+                                <span class="text-xs font-black text-amber-700">${item.points}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                desktopHTML += `
+                    <tr class="hover:bg-slate-50/80 transition-colors duration-150 animate-fade-in">
+                        <td class="py-3 px-4 font-black text-slate-900">${item.name}</td>
+                        <td class="py-3 px-4 text-xs"><span class="${genderClass} px-2 py-0.5 rounded-md font-bold"><i class="fa-solid ${genderIcon} ml-1"></i>${item.gender}</span></td>
+                        <td class="py-3 px-4 text-xs font-bold text-slate-600">${item.stage}</td>
+                        <td class="py-3 px-4 text-xs text-slate-500">${item.club}</td>
+                        <td class="py-3 px-4 text-center"><span class="bg-purple-50 text-purple-700 border border-purple-100 font-black px-2 py-0.5 rounded text-xs">${item.medical}</span></td>
+                        <td class="py-3 px-4 text-center font-bold text-xs text-slate-700">${item.comp}</td>
+                        <td class="py-3 px-4 text-center font-black text-emerald-700">${item.score}</td>
+                        <td class="py-3 px-4 text-center"><span class="${medalClass} text-xs px-2.5 py-0.5 rounded-full font-bold">${medalIcon}${item.rank}</span></td>
+                        <td class="py-3 px-4 text-center font-bold text-slate-700">${item.points}</td>
+                    </tr>
+                `;
+            });
+
+            mobileContainer.innerHTML = mobileHTML;
+            desktopContainer.innerHTML = desktopHTML;
+        }
+
+        function changePage(delta) {
+            currentPage += delta;
+            renderPage();
+            document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setPageSize() {
+            pageSize = parseInt(document.getElementById('page-size').value);
+            currentPage = 1;
+            renderPage();
+        }
+
+        function clearFilters() {
+            document.getElementById('filter-gender').value = '';
+            document.getElementById('filter-stage').value = '';
+            document.getElementById('filter-competition').value = '';
+            document.getElementById('filter-club').value = '';
+            document.getElementById('filter-medical').value = '';
+            document.getElementById('search-name').value = '';
+            sortKey = '';
+            document.querySelectorAll('.sort-header').forEach(th => th.classList.remove('sort-asc','sort-desc'));
+            filterData();
+        }
+
+        function updateStats() {
+            const maleCount = fullDataset.filter(i => i.gender === 'ذكر').length;
+            const femaleCount = fullDataset.filter(i => i.gender === 'انثى').length;
+            const clubsSet = new Set(fullDataset.map(i => i.club).filter(Boolean));
+            document.getElementById('stat-male').innerText = maleCount + ' سجل';
+            document.getElementById('stat-female').innerText = femaleCount + ' سجل';
+            document.getElementById('stat-clubs').innerText = clubsSet.size + ' هيئة ونادٍ';
+        }
+
+        window.onload = function() {
+            loadData();
+        };
+    </script>
+
+    <!-- تذييل المطور -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-3 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 text-[11px] font-semibold">
+                <span>تطوير: <span class="text-amber-400 font-bold">المهندس أحمد محمد سليمان</span></span>
+                <span class="hidden sm:inline text-slate-600">|</span>
+                <span class="flex items-center gap-1"><i class="fa-brands fa-whatsapp text-emerald-500"></i> +20 1100 502 095</span>
+                <span class="hidden sm:inline text-slate-600">|</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-envelope text-blue-400"></i> soliman.java@gmail.com</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

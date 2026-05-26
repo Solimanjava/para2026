@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تجميع النقاط والإحصائيات — الأندية المشاركة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(90deg, #0f172a 0%, #064e3b 50%, #0f172a 100%);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+            border-bottom: 4px solid #F59E0B;
+            position: relative;
+        }
+        .page-header::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 50%;
+            transform: translateX(-50%);
+            width: 80px; height: 4px;
+            background: #F59E0B;
+            border-radius: 2px;
+        }
+        .page-header h1 { font-size: 18pt; font-weight: 900; }
+        .page-header p { font-size: 10pt; color: #a7f3d0; margin-top: 4px; font-weight: 600; }
+        .page-header .year-badge {
+            display: inline-block;
+            background: #F59E0B;
+            color: #0f172a;
+            font-size: 9pt;
+            font-weight: 900;
+            padding: 2px 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        /* Controls */
+        .controls-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .controls-bar button {
+            font-family: 'Cairo', sans-serif;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 10pt;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-back { background: #e2e8f0; color: #475569; }
+        .btn-back:hover { background: #cbd5e1; }
+        .btn-print { background: linear-gradient(135deg, #059669, #047857); color: white; }
+        .btn-print:hover { box-shadow: 0 4px 12px rgba(5,150,105,0.35); transform: translateY(-1px); }
+
+        /* Summary cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .summary-card .icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+        .summary-card .label { font-size: 9pt; color: #64748b; font-weight: 700; }
+        .summary-card .value { font-size: 16pt; font-weight: 900; color: #0f172a; }
+        .bg-gold { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .bg-emerald { background: linear-gradient(135deg, #059669, #047857); }
+        .bg-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .bg-rose { background: linear-gradient(135deg, #e11d48, #be123c); }
+        .bg-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+
+        /* Leaderboard top 3 */
+        .podium {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .podium-item {
+            text-align: center;
+            flex: 1;
+            max-width: 200px;
+        }
+        .podium-item .club-name {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+            min-height: 36px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .podium-item .score-box {
+            border-radius: 12px;
+            padding: 14px 8px;
+            color: white;
+            font-weight: 900;
+        }
+        .podium-item .score-box .pts { font-size: 20pt; }
+        .podium-item .score-box .lbl { font-size: 8pt; opacity: 0.9; }
+        .podium-item .rank-circle {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 8px auto 0;
+            font-weight: 900;
+            font-size: 11pt;
+            color: white;
+        }
+        .podium-1 .score-box { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .podium-1 .rank-circle { background: #F59E0B; }
+        .podium-2 .score-box { background: linear-gradient(135deg, #94A3B8, #64748B); }
+        .podium-2 .rank-circle { background: #64748B; }
+        .podium-3 .score-box { background: linear-gradient(135deg, #B45309, #92400E); }
+        .podium-3 .rank-circle { background: #B45309; }
+
+        /* Clubs table */
+        .clubs-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .clubs-section .section-header {
+            background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 14px 20px;
+            font-size: 11pt;
+            font-weight: 900;
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .clubs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .clubs-table th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .clubs-table th:first-child { text-align: right; }
+        .clubs-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 10pt;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .clubs-table td:first-child {
+            text-align: right;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .clubs-table tr:hover { background: #f8fafc; }
+        .clubs-table tr:nth-child(even) { background: #fafafa; }
+        .clubs-table tr:nth-child(even):hover { background: #f8fafc; }
+
+        .rank-num {
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            font-size: 10pt;
+            font-weight: 900;
+        }
+        .rank-1 { background: linear-gradient(135deg, #F59E0B, #D97706); color: white; }
+        .rank-2 { background: linear-gradient(135deg, #94A3B8, #64748B); color: white; }
+        .rank-3 { background: linear-gradient(135deg, #B45309, #92400E); color: white; }
+        .rank-other { background: #f1f5f9; color: #475569; }
+
+        .total-points {
+            font-weight: 900;
+            color: #059669;
+            font-size: 11pt;
+        }
+        .medals-row {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .medal-chip {
+            font-size: 8pt;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .chip-gold { background: #fef3c7; color: #92400e; }
+        .chip-silver { background: #f1f5f9; color: #475569; }
+        .chip-bronze { background: #ffedd5; color: #7c2d12; }
+        .chip-other { background: #f8fafc; color: #94a3b8; border: 1px solid #e2e8f0; }
+
+        .medical-tags {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .med-tag {
+            font-size: 8pt;
+            padding: 1px 6px;
+            border-radius: 8px;
+            background: #f3e8ff;
+            color: #7e22ce;
+            font-weight: 600;
+            border: 1px solid #e9d5ff;
+        }
+
+        .gender-bar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: center;
+        }
+        .gender-bar .m { color: #2563eb; font-weight: 700; font-size: 9pt; }
+        .gender-bar .f { color: #db2777; font-weight: 700; font-size: 9pt; }
+        .gender-bar .sep { color: #cbd5e1; font-size: 8pt; }
+
+        /* Loading */
+        .loading-box { text-align: center; padding: 60px; }
+        .spinner {
+            width: 44px; height: 44px;
+            border: 3px solid #e2e8f0;
+            border-bottom-color: #059669;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media print {
+            .controls-bar { display: none; }
+            body { background: white; }
+            .container { padding: 10px; }
+            .podium { page-break-inside: avoid; }
+            .clubs-section { page-break-inside: avoid; }
+            .clubs-table tr { page-break-inside: avoid; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        /* Navbar */
+        .main-navbar {
+            background: linear-gradient(90deg, #0f172a 0%, #064e3b 100%);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #F59E0B;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .main-navbar .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .main-navbar .nav-logo .logo-icon {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            display: flex; align-items: center; justify-content: center;
+            color: #0f172a;
+            font-size: 14px;
+        }
+        .main-navbar .nav-logo span {
+            font-size: 11pt;
+            font-weight: 900;
+        }
+        .main-navbar .nav-links {
+            display: flex; gap: 6px;
+            flex-wrap: wrap;
+        }
+        .main-navbar .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .main-navbar .nav-links a:hover { background: rgba(255,255,255,0.1); }
+        .main-navbar .nav-links a.active {
+            background: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        /* Footer */
+        .dev-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            border-top: 1px solid #1e293b;
+            padding: 12px;
+            text-align: center;
+            font-size: 9pt;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .dev-footer a { color: #F59E0B; text-decoration: none; }
+        .dev-footer .sep { color: #475569; margin: 0 8px; }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="main-navbar">
+        <div class="nav-logo">
+            <div class="logo-icon"><i class="fa-solid fa-person-running"></i></div>
+            <span>بطولة العاب القوى البرالمبية</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="printresults.html">نتائج الطباعة</a>
+            <a href="points.html" class="active">النقاط</a>
+            <a href="developer.html">المطور</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="controls-bar">
+            <button class="btn-back" onclick="history.back()">
+                <i class="fa-solid fa-arrow-right"></i> رجوع
+            </button>
+            <button class="btn-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> طباعة / PDF
+            </button>
+        </div>
+
+        <div class="page-header">
+            <div class="year-badge">2026</div>
+            <h1><i class="fa-solid fa-trophy"></i> تجميع النقاط والإحصائيات — الأندية المشاركة</h1>
+            <p>بطولة ألعاب القوى البرالمبية المصرية — جدول الترتيب الرسمي للهيئات والأندية</p>
+        </div>
+
+        <div id="loading-box" class="loading-box">
+            <div class="spinner"></div>
+            <p style="color:#64748b; font-weight:700;">جاري حساب النقاط والإحصائيات...</p>
+        </div>
+
+        <div id="content" style="display:none;">
+            <div class="summary-cards" id="summary-cards"></div>
+
+            <div class="podium" id="podium"></div>
+
+            <div class="clubs-section">
+                <div class="section-header">
+                    <i class="fa-solid fa-list-ol text-emerald-600"></i>
+                    جدول الترتيب التفصيلي للأندية
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="clubs-table" id="clubs-table">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th style="text-align:right">النادي / الهيئة</th>
+                                <th>المشاركين</th>
+                                <th>الذكور</th>
+                                <th>الإناث</th>
+                                <th>الفئات الطبية</th>
+                                <th>المراكز (1st–5th)</th>
+                                <th>إجمالي النقاط</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadData() {
+            try {
+                const res = await fetch('data.json');
+                const data = await res.json();
+                data.forEach(d => d.points = parseFloat(d.points) || 0);
+                buildStats(data);
+            } catch (e) {
+                document.getElementById('loading-box').innerHTML = '<p style="color:#dc2626; font-weight:700;">تعذر تحميل البيانات</p>';
+            }
+        }
+
+        function buildStats(data) {
+            const clubs = {};
+            data.forEach(item => {
+                const c = item.club || 'غير محدد';
+                if (!clubs[c]) {
+                    clubs[c] = {
+                        name: c,
+                        participants: new Set(),
+                        males: new Set(),
+                        females: new Set(),
+                        medicals: new Set(),
+                        points: 0,
+                        medals: { 1:0, 2:0, 3:0, other:0 }
+                    };
+                }
+                clubs[c].participants.add(item.name);
+                clubs[c].points += item.points;
+                clubs[c].medicals.add(item.medical);
+                if (item.gender === 'ذكر') clubs[c].males.add(item.name);
+                else clubs[c].females.add(item.name);
+
+                const r = item.rank;
+                if (r === 'الاول' || r === 'الأول') clubs[c].medals[1]++;
+                else if (r === 'الثاني' || r === 'الثانى') clubs[c].medals[2]++;
+                else if (r === 'الثالث') clubs[c].medals[3]++;
+                else clubs[c].medals.other++;
+            });
+
+            const arr = Object.values(clubs).sort((a, b) => b.points - a.points);
+
+            // Summary
+            const totalClubs = arr.length;
+            const totalPts = arr.reduce((s, c) => s + c.points, 0);
+            const totalPpl = new Set(data.map(d => d.name)).size;
+            const totalMeds = new Set(data.map(d => d.medical)).size;
+
+            document.getElementById('summary-cards').innerHTML = `
+                <div class="summary-card">
+                    <div class="icon bg-gold"><i class="fa-solid fa-trophy"></i></div>
+                    <div><div class="label">إجمالي النقاط</div><div class="value">${totalPts}</div></div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon bg-emerald"><i class="fa-solid fa-building"></i></div>
+                    <div><div class="label">الأندية المشاركة</div><div class="value">${totalClubs}</div></div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon bg-blue"><i class="fa-solid fa-users"></i></div>
+                    <div><div class="label">المشاركين</div><div class="value">${totalPpl}</div></div>
+                </div>
+                <div class="summary-card">
+                    <div class="icon bg-purple"><i class="fa-solid fa-wheelchair"></i></div>
+                    <div><div class="label">الفئات الطبية</div><div class="value">${totalMeds}</div></div>
+                </div>
+            `;
+
+            // Podium
+            const podium = document.getElementById('podium');
+            if (arr.length >= 3) {
+                podium.innerHTML = `
+                    <div class="podium-item podium-2">
+                        <div class="club-name">${arr[1].name}</div>
+                        <div class="score-box">
+                            <div class="pts">${arr[1].points}</div>
+                            <div class="lbl">نقطة</div>
+                        </div>
+                        <div class="rank-circle">2</div>
+                    </div>
+                    <div class="podium-item podium-1">
+                        <div class="club-name">${arr[0].name}</div>
+                        <div class="score-box">
+                            <div class="pts">${arr[0].points}</div>
+                            <div class="lbl">نقطة</div>
+                        </div>
+                        <div class="rank-circle">1</div>
+                    </div>
+                    <div class="podium-item podium-3">
+                        <div class="club-name">${arr[2].name}</div>
+                        <div class="score-box">
+                            <div class="pts">${arr[2].points}</div>
+                            <div class="lbl">نقطة</div>
+                        </div>
+                        <div class="rank-circle">3</div>
+                    </div>
+                `;
+            } else {
+                podium.style.display = 'none';
+            }
+
+            // Table
+            const tbody = document.querySelector('#clubs-table tbody');
+            arr.forEach((c, i) => {
+                const rank = i + 1;
+                const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-other';
+                const medTags = Array.from(c.medicals).sort().slice(0, 5).map(m => `<span class="med-tag">${m}</span>`).join('');
+                const medMore = c.medicals.size > 5 ? `<span class="med-tag" style="background:#f1f5f9;color:#64748b;">+${c.medicals.size - 5}</span>` : '';
+
+                const medals = [];
+                if (c.medals[1]) medals.push(`<span class="medal-chip chip-gold">🥇 ${c.medals[1]}</span>`);
+                if (c.medals[2]) medals.push(`<span class="medal-chip chip-silver">🥈 ${c.medals[2]}</span>`);
+                if (c.medals[3]) medals.push(`<span class="medal-chip chip-bronze">🥉 ${c.medals[3]}</span>`);
+                if (c.medals.other) medals.push(`<span class="medal-chip chip-other">${c.medals.other}</span>`);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><span class="rank-num ${rankClass}">${rank}</span></td>
+                    <td>${c.name}</td>
+                    <td>${c.participants.size}</td>
+                    <td>
+                        <div class="gender-bar">
+                            <span class="m">${c.males.size} <i class="fa-solid fa-mars"></i></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="gender-bar">
+                            <span class="f">${c.females.size} <i class="fa-solid fa-venus"></i></span>
+                        </div>
+                    </td>
+                    <td><div class="medical-tags">${medTags}${medMore}</div></td>
+                    <td><div class="medals-row">${medals.join('')}</div></td>
+                    <td><span class="total-points">${c.points}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('loading-box').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }
+
+        window.onload = loadData;
+    </script>
+
+    <!-- تذييل المطور -->
+    <footer class="dev-footer">
+        تطوير: <a href="developer.html">المهندس أحمد محمد سليمان</a>
+        <span class="sep">|</span>
+        <i class="fa-brands fa-whatsapp" style="color:#34d399"></i> +20 1100 502 095
+        <span class="sep">|</span>
+        <i class="fa-solid fa-envelope" style="color:#60a5fa"></i> soliman.java@gmail.com
+    </footer>
+</body>
+</html>

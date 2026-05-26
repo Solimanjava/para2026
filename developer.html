@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer & Credits | المطور</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Cairo', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 40%, #1e293b 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: rgba(245, 158, 11, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-40px) scale(1.2); opacity: 0.7; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #e2e8f0;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 10pt;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-btn:hover {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Developer Card */
+        .dev-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .dev-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #F59E0B, #059669, #3b82f6);
+        }
+
+        .avatar-ring {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F59E0B, #059669);
+            padding: 4px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+        }
+        .avatar {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #F59E0B;
+        }
+
+        .name-ar {
+            font-size: 22pt;
+            font-weight: 900;
+            color: #f8fafc;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .name-en {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14pt;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 9pt;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-gold {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .badge-emerald {
+            background: rgba(5, 150, 105, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .contact-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #F59E0B;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .contact-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 10pt;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .contact-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .link-whatsapp {
+            background: rgba(5, 150, 105, 0.15);
+            color: #34d399;
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+        .link-whatsapp:hover {
+            background: rgba(5, 150, 105, 0.25);
+        }
+        .link-email {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .link-email:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        /* Dedication */
+        .dedication {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(5, 150, 105, 0.08));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+            text-align: center;
+            position: relative;
+        }
+        .dedication::before {
+            content: '\201C';
+            font-family: Georgia, serif;
+            font-size: 60px;
+            color: rgba(245, 158, 11, 0.2);
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            line-height: 1;
+        }
+        .dedication-label {
+            font-size: 10pt;
+            color: #F59E0B;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .dedication-text {
+            font-size: 14pt;
+            font-weight: 900;
+            color: #f8fafc;
+            margin-bottom: 4px;
+        }
+        .dedication-sub {
+            font-size: 11pt;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 9pt;
+            color: #64748b;
+        }
+        .heart {
+            color: #ef4444;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        @media print {
+            body { background: white; color: #0f172a; }
+            .dev-card, .dedication, .contact-section { background: #f8fafc; border: 1px solid #e2e8f0; }
+            .back-btn { display: none; }
+        }
+
+        /* Navbar */
+        .main-navbar {
+            background: linear-gradient(90deg, #0f172a 0%, #064e3b 100%);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #F59E0B;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .main-navbar .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+        }
+        .main-navbar .nav-logo .logo-icon {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            display: flex; align-items: center; justify-content: center;
+            color: #0f172a;
+            font-size: 14px;
+        }
+        .main-navbar .nav-logo span {
+            font-size: 11pt;
+            font-weight: 900;
+        }
+        .main-navbar .nav-links {
+            display: flex; gap: 6px;
+            flex-wrap: wrap;
+        }
+        .main-navbar .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 9pt;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .main-navbar .nav-links a:hover { background: rgba(255,255,255,0.1); }
+        .main-navbar .nav-links a.active {
+            background: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        /* Footer */
+        .dev-footer {
+            background: #0f172a;
+            color: #94a3b8;
+            border-top: 1px solid #1e293b;
+            padding: 12px;
+            text-align: center;
+            font-size: 9pt;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .dev-footer a { color: #F59E0B; text-decoration: none; }
+        .dev-footer .sep { color: #475569; margin: 0 8px; }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="main-navbar">
+        <div class="nav-logo">
+            <div class="logo-icon"><i class="fa-solid fa-person-running"></i></div>
+            <span>بطولة العاب القوى البرالمبية</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">الرئيسية</a>
+            <a href="printresults.html">نتائج الطباعة</a>
+            <a href="points.html">النقاط</a>
+            <a href="developer.html" class="active">المطور</a>
+        </div>
+    </nav>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            <i class="fa-solid fa-arrow-right"></i> رجوع للرئيسية / Back
+        </a>
+
+        <div class="dev-card">
+            <div class="avatar-ring">
+                <div class="avatar"><i class="fa-solid fa-code"></i></div>
+            </div>
+
+            <div class="name-ar">المهندس أحمد محمد سليمان</div>
+            <div class="name-en">Eng. Ahmed Mohamed Soliman</div>
+
+            <div class="badges">
+                <span class="badge badge-emerald"><i class="fa-solid fa-laptop-code"></i> مطور برمجيات</span>
+                <span class="badge badge-emerald"><i class="fa-solid fa-laptop-code"></i> Software Developer</span>
+                <span class="badge badge-blue"><i class="fa-solid fa-chart-line"></i> عالم بيانات</span>
+                <span class="badge badge-blue"><i class="fa-solid fa-chart-line"></i> Data Scientist</span>
+            </div>
+
+            <div class="contact-section">
+                <div class="contact-title">
+                    <i class="fa-solid fa-address-card"></i>
+                    معلومات التواصل / Contact Info
+                </div>
+                <div class="contact-links">
+                    <a href="https://wa.me/201100502095" target="_blank" class="contact-link link-whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        WhatsApp: +20 1100 502 095
+                    </a>
+                    <a href="mailto:soliman.java@gmail.com" class="contact-link link-email">
+                        <i class="fa-solid fa-envelope"></i>
+                        soliman.java@gmail.com
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="dedication">
+            <div class="dedication-label">— إهداء خاص / Special Dedication —</div>
+            <div class="dedication-text">إلى المعلم الكبير</div>
+            <div class="dedication-sub">الدكتور حمدي عبد الرحيم</div>
+            <div class="dedication-sub" style="font-family:'Poppins',sans-serif; font-size:10pt; margin-top:6px;">
+                To the Great Mentor: Dr. Hamdy Abd El-Raheem
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <i class="fa-solid fa-heart heart"></i>
+            تم التطوير بكل تقدير واحترام / Developed with respect & gratitude
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 6 + 's';
+            p.style.animationDuration = (4 + Math.random() * 4) + 's';
+            p.style.width = (4 + Math.random() * 6) + 'px';
+            p.style.height = p.style.width;
+            particlesContainer.appendChild(p);
+        }
+    </script>
+
+    <!-- تذييل المطور -->
+    <footer class="dev-footer">
+        تطوير: <a href="developer.html">المهندس أحمد محمد سليمان</a>
+        <span class="sep">|</span>
+        <i class="fa-brands fa-whatsapp" style="color:#34d399"></i> +20 1100 502 095
+        <span class="sep">|</span>
+        <i class="fa-solid fa-envelope" style="color:#60a5fa"></i> soliman.java@gmail.com
+    </footer>
+</body>
+</html>
